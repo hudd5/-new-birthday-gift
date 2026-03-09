@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XXX22岁生日快乐</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        
+        /* 页面容器 */
+        .page {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #0066cc; /* 蓝底 */
+            color: #000; /* 黑字 */
+            padding: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        /* 点击提示文字样式 */
+        .click-hint {
+            position: absolute;
+            bottom: 30px;
+            font-size: 28px;
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            animation: blink 2s infinite alternate;
+            z-index: 100;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        /* BGM播放提示 - 左下角播放键位置 */
+        .bgm-hint {
+            position: absolute;
+            left: 40px;
+            bottom: 80px;
+            font-size: 20px;
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            animation: blink 2s infinite alternate;
+            z-index: 100;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        /* 第一个页面样式 */
+        #page1 {
+            display: flex;
+        }
+        .birthday-title {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        /* 视频容器 - 适配原比例 */
+        .video-container {
+            width: 90%;
+            max-width: 1280px;
+            height: auto;
+            max-height: 70vh;
+            margin: 0 auto;
+            position: relative;
+            border: 3px solid #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        #birthdayVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            display: block;
+        }
+        
+        /* 第二个页面（扫码支付） */
+        #page2 {
+            background-color: #0066cc;
+        }
+        .pay-title {
+            font-size: 36px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .pay-qrcode {
+            width: 320px;
+            height: 320px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 5px solid #ff6b9d;
+        }
+        .pay-qrcode img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .pay-text {
+            font-size: 26px;
+            color: #ffefef;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        
+        /* 第三个页面（盲盒） */
+        #page3 {
+            background-color: #0066cc;
+            padding: 20px 0;
+        }
+        .page-title {
+            font-size: 36px;
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+        .gift-boxes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            width: 85%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        /* 高级礼盒样式 */
+        .gift-box {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, #ff8fab, #ff4d70);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25),
+                        inset 0 -5px 10px rgba(0,0,0,0.1),
+                        inset 0 5px 10px rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        /* 礼盒装饰 */
+        .gift-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(180deg, #ffd1dc, #ff99aa);
+            transform: translateX(-50%);
+        }
+        .gift-box::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: linear-gradient(90deg, #ffd1dc, #ff99aa);
+            transform: translateY(-50%);
+        }
+        .gift-box:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.35);
+        }
+        .box-text {
+            font-size: 22px;
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+        /* 已点击的盲盒样式 */
+        .gift-box.clicked {
+            pointer-events: none;
+            opacity: 0.6;
+            transform: scale(0.95);
+        }
+        /* 空盲盒提示弹窗 */
+        .empty-box-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 102, 204, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        .empty-box-text {
+            font-size: 32px;
+            color: #ffffff;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 特效样式 */
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            opacity: 0;
+            animation: confetti 3s ease-in-out forwards;
+            z-index: 1000;
+            border-radius: 2px;
+        }
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        /* 礼物展示样式 */
+        .gift-display {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 102, 204, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        .gift-emoji {
+            font-size: 180px;
+            animation: scaleUp 1.2s ease-in-out;
+            margin: 20px 0;
+        }
+        @keyframes scaleUp {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .congrats-text {
+            font-size: 65px;
+            color: #ff4d70;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        /* 最后页面样式 */
+        #page4 {
+            background-color: #0066cc;
+        }
+        .final-title {
+            font-size: 52px;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #ffffff;
+            text-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        }
+        .final-subtitle {
+            font-size: 38px;
+            text-align: center;
+            color: #ffefef;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面1：生日祝福 + 本地视频 -->
+    <div class="page" id="page1">
+        <h1 class="birthday-title">祝XXX22岁生日快乐！</h1>
+        <div class="video-container">
+            <video id="birthdayVideo" controls autoplay playsinline>
+                <source src="file:///C:/Users/zano1/Videos/生日投屏素材.mp4" type="video/mp4">
+                您的浏览器不支持视频播放，请更换浏览器重试！
+            </video>
+        </div>
+        <!-- 左下角BGM播放提示 -->
+        <div class="bgm-hint">点击左下角播放键，播放生日歌BGM 🎵</div>
+        <!-- 底部跳转提示 -->
+        <div class="click-hint">点击屏幕任意位置，前往下个环节 🎉</div>
+    </div>
+
+    <!-- 页面2：扫码支付 -->
+    <div class="page" id="page2">
+        <h2 class="pay-title">开启盲盒需支付 8.88 元</h2>
+        <div class="pay-qrcode">
+            <img src="file:///C:/Users/zano1/Pictures/hello/money.jpg" alt="生日盲盒收款码">
+        </div>
+        <p class="pay-text">支付完成后，点击屏幕任意位置开启盲盒</p>
+    </div>
+
+    <!-- 页面3：9个盲盒 -->
+    <div class="page" id="page3">
+        <h2 class="page-title">请挑选生日盲盒喔~考验运气的时刻到啦！</h2>
+        <div class="gift-boxes" id="giftBoxes">
+            <!-- 盲盒由JS动态生成 -->
+        </div>
+    </div>
+
+    <!-- 空盲盒提示弹窗 -->
+    <div class="empty-box-popup" id="emptyBoxPopup">
+        <div class="empty-box-text">生日快乐babe，再接再厉喔~</div>
+    </div>
+
+    <!-- 礼物展示弹窗 -->
+    <div class="gift-display" id="giftDisplay">
+        <div class="congrats-text">恭喜选中</div>
+        <div class="gift-emoji" id="giftEmoji"></div>
+    </div>
+
+    <!-- 页面4：最终祝福 -->
+    <div class="page" id="page4">
+        <h1 class="final-title">祝XXX生日快乐</h1>
+        <p class="final-subtitle">愿天天开心，万事顺遂 🥳</p>
+        <div class="click-hint">点击屏幕任意位置，结束祝福之旅 ✨</div>
+    </div>
+
+    <!-- 背景音乐（生日歌） -->
+    <audio id="bgm" loop preload="auto">
+        <source src="https://www.bilibili.com/audio/au3986780?type=mp3" type="audio/mpeg">
+    
+
+    <script>
+        // 全局变量
+        const giftBoxes = [
+            { type: 'empty' }, { type: 'empty' }, { type: 'empty' },
+            { type: 'empty' }, { type: 'empty' }, { type: 'empty' },
+            { type: 'gift', emoji: '💐' }, { type: 'gift', emoji: '🎂' }, { type: 'gift', emoji: '🎁' }
+        ];
+        let foundGifts = 0; // 已找到的礼物数量
+        const totalGifts = 3; // 总礼物数量
+        let currentBoxIndex = null; // 当前要打开的盲盒索引
+        let bgmPlayed = false; // 标记BGM是否已播放
+
+        // 元素获取
+        const page1 = document.getElementById('page1');
+        const page2 = document.getElementById('page2');
+        const page3 = document.getElementById('page3');
+        const page4 = document.getElementById('page4');
+        const birthdayVideo = document.getElementById('birthdayVideo');
+        const giftBoxesContainer = document.getElementById('giftBoxes');
+        const giftDisplay = document.getElementById('giftDisplay');
+        const giftEmoji = document.getElementById('giftEmoji');
+        const emptyBoxPopup = document.getElementById('emptyBoxPopup');
+        const bgm = document.getElementById('bgm');
+        const bgmHint = document.querySelector('.bgm-hint');
+
+        // 初始化核心函数
+        window.addEventListener('load', () => {
+            // 监听视频播放，播放BGM并触发彩花特效
+            birthdayVideo.addEventListener('play', () => {
+                if (!bgmPlayed) {
+                    // 播放BGM
+                    bgm.play().catch(err => {
+                        console.log('BGM播放提示:', err);
+                        alert('请手动播放生日歌BGM，祝你生日快乐！');
+                    });
+                    // 播放生日彩花喷桶特效
+                    createConfetti();
+                    bgmPlayed = true;
+                    bgmHint.style.display = 'none'; // 播放后隐藏提示
+                }
+            });
+
+            // 生成9个盲盒
+            renderGiftBoxes();
+
+            // 页面1交互：点击任意位置跳转到盲盒页（避开视频控制栏）
+            page1.addEventListener('click', (e) => {
+                if (!e.target.closest('video')) {
+                    page1.style.display = 'none';
+                    page3.style.display = 'flex';
+                }
+            });
+
+            // 页面2交互：点击任意位置模拟支付，打开当前盲盒
+            page2.addEventListener('click', () => {
+                page2.style.display = 'none';
+                page3.style.display = 'flex';
+                if (currentBoxIndex !== null) {
+                    handleBoxClick(currentBoxIndex);
+                    currentBoxIndex = null;
+                }
+            });
+
+            // 空盲盒弹窗交互：点击任意位置关闭弹窗
+            emptyBoxPopup.addEventListener('click', () => {
+                emptyBoxPopup.style.display = 'none';
+            });
+
+            // 页面4交互：点击任意位置结束
+            page4.addEventListener('click', () => {
+                alert('生日祝福之旅结束啦！祝XXX22岁生日快乐！🎂');
+            });
+        });
+
+        // 生成盲盒函数
+        function renderGiftBoxes() {
+            giftBoxesContainer.innerHTML = '';
+            giftBoxes.forEach((box, index) => {
+                const boxElement = document.createElement('div');
+                boxElement.className = 'gift-box';
+                boxElement.dataset.index = index;
+                boxElement.innerHTML = `<div class="box-text">礼物盒 ${index + 1}</div>`;
+                
+                // 盲盒点击逻辑：先跳转到支付页
+                boxElement.addEventListener('click', () => {
+                    if (!boxElement.classList.contains('clicked')) {
+                        currentBoxIndex = index;
+                        page3.style.display = 'none';
+                        page2.style.display = 'flex';
+                    }
+                });
+                
+                giftBoxesContainer.appendChild(boxElement);
+            });
+        }
+
+        // 处理盲盒打开逻辑
+        function handleBoxClick(index) {
+            const box = giftBoxes[index];
+            const boxElement = document.querySelector(`[data-index="${index}"]`);
+            
+            // 标记已点击的盒子
+            boxElement.classList.add('clicked');
+
+            if (box.type === 'empty') {
+                // 空盒子：直接弹出提示弹窗
+                emptyBoxPopup.style.display = 'flex';
+                setTimeout(() => {
+                    emptyBoxPopup.style.display = 'none';
+                }, 2500);
+            } else {
+                // 有礼物：彩花特效 + 弹窗展示
+                createConfetti();
+                giftEmoji.textContent = box.emoji;
+                giftDisplay.style.display = 'flex';
+                
+                foundGifts++;
+                // 关闭弹窗并检查是否集齐所有礼物
+                setTimeout(() => {
+                    giftDisplay.style.display = 'none';
+                    if (foundGifts === totalGifts) {
+                        setTimeout(() => {
+                            page3.style.display = 'none';
+                            page4.style.display = 'flex';
+                        }, 1200);
+                    }
+                }, 3000);
+            }
+        }
+
+        // 生成生日彩花喷桶特效
+        function createConfetti() {
+            const confettiCount = 150;
+            const colors = ['#ff4d70', '#ffd1dc', '#ffffff', '#ffeb3b', '#4caf50', '#2196f3'];
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = `${Math.random() * 2.5}s`;
+                confetti.style.width = `${Math.random() * 8 + 6}px`;
+                confetti.style.height = `${Math.random() * 8 + 6}px`;
+                document.body.appendChild(confetti);
+                
+                // 移除礼花元素
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3500);
+            }
+        }
+    </script>
+</body>
+</html>
