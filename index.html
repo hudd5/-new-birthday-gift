@@ -91,43 +91,52 @@
             display: block;
         }
         
-        /* 第二个页面（扫码支付） */
-        #page2 {
-            background-color: #0066cc;
-        }
-        .pay-title {
-            font-size: 36px;
-            margin-bottom: 30px;
-            text-align: center;
-            color: #ffffff;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        .pay-qrcode {
-            width: 320px;
-            height: 320px;
-            background-color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            border: 5px solid #ff6b9d;
-        }
-        .pay-qrcode img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .pay-text {
-            font-size: 26px;
-            color: #ffefef;
-            font-weight: bold;
-            text-align: center;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
-        }
+  /* 第二个页面（扫码支付） */
+#page2 {
+    background-color: #0066cc;
+}
+.pay-title {
+    font-size: 36px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.pay-qrcode {
+    width: 320px;
+    height: 320px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    /* 关键1：去掉overflow: hidden，避免裁切二维码 */
+    /* overflow: hidden; */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    border: 5px solid #ff6b9d;
+    /* 关键2：边框算在容器尺寸内，不挤压二维码 */
+    box-sizing: border-box;
+    /* 给二维码留内边距，避免贴边框 */
+    padding: 8px;
+}
+.pay-qrcode img {
+    /* 关键3：取消100%宽高，按原图比例显示 */
+    width: 100%;
+    height: 100%;
+    /* 关键4：替换cover为contain，完整显示图片不裁切 */
+    object-fit: contain;
+    /* 可选：消除图片默认空隙 */
+    display: block;
+}
+.pay-text {
+    font-size: 26px;
+    color: #ffefef;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+}
         
         /* 第三个页面（盲盒） */
         #page3 {
@@ -508,6 +517,7 @@
 </body>
 
 </html>
+
 
 
 
